@@ -72,10 +72,12 @@ export class AuthMicroserviceService {
   }
 
   private async getRefreshToken(userId: string): Promise<TokenEntity> {
-    return this.tokenRepository.create({
+    const newToken = this.tokenRepository.create({
       token: v4(),
       exp: add(new Date(), { weeks: 1 }),
       userId,
     });
+
+    return await this.tokenRepository.save(newToken);
   }
 }
