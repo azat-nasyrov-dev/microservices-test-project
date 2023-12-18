@@ -8,5 +8,6 @@ import { UserEntity } from './entities/user.entity';
   imports: [TypeOrmModule.forFeature([UserEntity])],
   controllers: [UsersMicroserviceController],
   providers: [UsersMicroserviceService],
+  exports: [UsersMicroserviceService],
 })
 export class UsersMicroserviceModule {}
