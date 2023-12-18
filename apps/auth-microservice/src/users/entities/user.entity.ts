@@ -1,9 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { TokenEntity } from '../../auth/entities/token.entity';
 
 @Entity({ name: 'users' })
 export class UserEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({ nullable: false })
   email: string;
@@ -24,4 +25,7 @@ export class UserEntity {
     default: () => 'CURRENT_TIMESTAMP',
   })
   updatedAt: Date;
+
+  @OneToMany(() => TokenEntity, (token) => token.user)
+  tokens: TokenEntity[];
 }

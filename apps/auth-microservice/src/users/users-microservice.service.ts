@@ -25,7 +25,7 @@ export class UsersMicroserviceService {
     return await this.userRepository.findOne({ where: { email } });
   }
 
-  public async findUserById(id: number) {
+  public async findUserById(id: string) {
     if (!id) {
       return null;
     }
@@ -33,7 +33,7 @@ export class UsersMicroserviceService {
     return await this.userRepository.findOne({ where: { id } });
   }
 
-  public async deleteUserById(id: number) {
+  public async deleteUserById(id: string) {
     const user = await this.findUserById(id);
 
     if (!user) {
@@ -43,7 +43,7 @@ export class UsersMicroserviceService {
     return await this.userRepository.remove(user);
   }
 
-  public async updateUserById(id: number, attrs: Partial<UserEntity>) {
+  public async updateUserById(id: string, attrs: Partial<UserEntity>) {
     const user = await this.findUserById(id);
 
     if (!user) {

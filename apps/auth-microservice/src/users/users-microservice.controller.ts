@@ -33,7 +33,7 @@ export class UsersMicroserviceController {
 
   @Get(':id')
   public async findUserById(@Param('id') id: string) {
-    const user = await this.usersMicroserviceService.findUserById(parseInt(id));
+    const user = await this.usersMicroserviceService.findUserById(id);
 
     if (!user) {
       throw new NotFoundException('User not found');
@@ -44,7 +44,7 @@ export class UsersMicroserviceController {
 
   @Delete(':id')
   public async deleteUserById(@Param('id') id: string) {
-    return await this.usersMicroserviceService.deleteUserById(parseInt(id));
+    return await this.usersMicroserviceService.deleteUserById(id);
   }
 
   @Patch(':id')
@@ -53,9 +53,6 @@ export class UsersMicroserviceController {
     @Param('id') id: string,
     @Body() dto: UpdateUserDto,
   ) {
-    return await this.usersMicroserviceService.updateUserById(
-      parseInt(id),
-      dto,
-    );
+    return await this.usersMicroserviceService.updateUserById(id, dto);
   }
 }
