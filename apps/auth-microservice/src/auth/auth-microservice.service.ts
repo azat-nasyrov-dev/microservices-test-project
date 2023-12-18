@@ -60,6 +60,29 @@ export class AuthMicroserviceService {
       throw new UnauthorizedException('Wrong login or password');
     }
 
+    return this.generateTokens(user);
+  }
+
+  public async refreshTokens(refreshToken: string): Promise<Tokens> {
+    const token = await this.tokenRepository.findOne({
+      where: { token: refreshToken },
+    });
+
+    if (!token) {
+      throw new UnauthorizedException();
+    }
+
+    await this.tokenRepository.remove(token);
+
+    if (new Date(token.exp) < new Date()) {
+      throw new UnauthorizedException();
+    }
+
+    const user = await this.usersMicroserviceService.findUserById(token.userId);
+    return this.generateTokens(user);
+  }
+
+  private async generateTokens(user: UserEntity): Promise<Tokens> {
     const accessToken =
       'Bearer ' +
       this.jwtService.sign({
