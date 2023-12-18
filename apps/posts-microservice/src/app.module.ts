@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AuthMicroserviceModule } from './auth/auth-microservice.module';
-import { UsersMicroserviceModule } from './users/users-microservice.module';
 import { TypeormModule } from '@app/common/typeorm/typeorm.module';
+import { PostsMicroserviceModule } from './posts/posts-microservice.module';
 
 @Module({
   imports: [
@@ -11,8 +10,7 @@ import { TypeormModule } from '@app/common/typeorm/typeorm.module';
       envFilePath: 'envs/.auth.env',
     }),
     TypeormModule,
-    AuthMicroserviceModule,
-    UsersMicroserviceModule,
+    PostsMicroserviceModule,
   ],
 })
 export class AppModule {}
