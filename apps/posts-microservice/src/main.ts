@@ -1,8 +1,10 @@
 import { NestFactory } from '@nestjs/core';
-import { PostsMicroserviceModule } from './posts-microservice.module';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(PostsMicroserviceModule);
+  const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix('api');
   await app.listen(3000);
 }
+
 bootstrap();
