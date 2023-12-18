@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AuthMicroserviceModule } from './../src/auth-microservice.module';
+import { AuthMicroserviceModule } from '../src/auth/auth-microservice.module';
 
 describe('AuthMicroserviceController (e2e)', () => {
   let app: INestApplication;
