@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { UserEntity } from '../../../../auth-microservice/src/users/entities/user.entity';
 
 @Entity({ name: 'posts' })
 export class PostEntity {
@@ -27,4 +28,7 @@ export class PostEntity {
     default: () => 'CURRENT_TIMESTAMP',
   })
   updatedAt: Date;
+
+  @ManyToOne(() => UserEntity, (user) => user.posts, { eager: true })
+  author: UserEntity;
 }

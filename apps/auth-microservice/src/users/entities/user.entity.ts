@@ -1,5 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { TokenEntity } from '../../auth/entities/token.entity';
+import { PostEntity } from '../../../../posts-microservice/src/posts/entities/post.entity';
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -28,4 +29,7 @@ export class UserEntity {
 
   @OneToMany(() => TokenEntity, (token) => token.user)
   tokens: TokenEntity[];
+
+  @OneToMany(() => PostEntity, (post) => post.author)
+  posts: PostEntity[];
 }
