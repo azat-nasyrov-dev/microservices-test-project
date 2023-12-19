@@ -17,13 +17,27 @@ import { UserEntity } from '../../../auth-microservice/src/users/entities/user.e
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { AuthGuard } from '../guards/auth.guard';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('Posts')
 @Controller('posts')
 export class PostsMicroserviceController {
   constructor(
     private readonly postsMicroserviceService: PostsMicroserviceService,
   ) {}
 
+  @ApiOperation({ summary: 'Create post' })
+  @ApiResponse({
+    status: 201,
+    description: 'The post has been successfully created',
+  })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   @UseGuards(AuthGuard)
   @Post()
   @UsePipes(new ValidationPipe())
@@ -34,11 +48,15 @@ export class PostsMicroserviceController {
     return await this.postsMicroserviceService.createPost(currentUser, dto);
   }
 
+  @ApiOperation({ summary: 'Get single post' })
+  @ApiResponse({ status: 200, description: 'Return single post' })
   @Get(':id')
   public async findPostById(@Param('id') id: string) {
     return await this.postsMicroserviceService.findPostById(id);
   }
 
+  @ApiOperation({ summary: 'Get all posts' })
+  @ApiResponse({ status: 200, description: 'Return all posts' })
   @Get()
   public async findListOfPosts(
     @User('id') currentUserId: string,
@@ -50,6 +68,12 @@ export class PostsMicroserviceController {
     );
   }
 
+  @ApiOperation({ summary: 'Delete post' })
+  @ApiResponse({
+    status: 201,
+    description: 'The post has been successfully deleted',
+  })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   @UseGuards(AuthGuard)
   @Delete(':id')
   public async deletePostById(
@@ -62,6 +86,12 @@ export class PostsMicroserviceController {
     );
   }
 
+  @ApiOperation({ summary: 'Update post' })
+  @ApiResponse({
+    status: 201,
+    description: 'The post has been successfully updated',
+  })
+  @ApiResponse({ status: 403, description: 'Forbidden' })
   @UseGuards(AuthGuard)
   @Put(':id')
   @UsePipes(new ValidationPipe())
