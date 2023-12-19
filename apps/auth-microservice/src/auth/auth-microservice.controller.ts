@@ -14,15 +14,20 @@ import { AuthMicroserviceService } from './auth-microservice.service';
 import { Tokens } from './types/auth.interface';
 import { Response } from 'express';
 import { Cookie } from '@app/common/decorators/cookies.decorator';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 const REFRESH_TOKEN = 'refreshtoken';
 
+@ApiBearerAuth()
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthMicroserviceController {
   constructor(
     private readonly authMicroserviceService: AuthMicroserviceService,
   ) {}
 
+  @ApiOperation({ summary: 'Register user' })
+  @ApiResponse({ status: 201, description: 'The user has been successfully registered' })
   @Post('register')
   public async register(@Body() dto: AuthRegisterDto) {
     const user = await this.authMicroserviceService.register(dto);
@@ -34,6 +39,8 @@ export class AuthMicroserviceController {
     return user;
   }
 
+  @ApiOperation({ summary: 'Login user' })
+  @ApiResponse({ status: 201, description: 'The user has been successfully login' })
   @Post('login')
   public async login(@Body() dto: AuthLoginDto, @Res() res: Response) {
     const tokens = await this.authMicroserviceService.login(dto);
@@ -45,6 +52,8 @@ export class AuthMicroserviceController {
     this.setRefreshTokenToCookie(tokens, res);
   }
 
+  @ApiOperation({ summary: 'Refresh user tokens' })
+  @ApiResponse({ status: 200, description: 'The user tokens has been successfully refreshed' })
   @Get('refresh-tokens')
   public async refreshTokens(
     @Cookie(REFRESH_TOKEN) refreshToken: string,
