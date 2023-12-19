@@ -23,6 +23,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { RMQService } from 'nestjs-rmq';
 
 @ApiBearerAuth()
 @ApiTags('Posts')
@@ -30,6 +31,7 @@ import {
 export class PostsMicroserviceController {
   constructor(
     private readonly postsMicroserviceService: PostsMicroserviceService,
+    private readonly rmqService: RMQService,
   ) {}
 
   @ApiOperation({ summary: 'Create post' })
