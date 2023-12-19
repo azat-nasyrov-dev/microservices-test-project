@@ -5,6 +5,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const PORT = process.env.PORT || 3000;
   app.use(cookieParser());
   app.setGlobalPrefix('api');
 
@@ -20,7 +21,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('/api/auth-microservice/docs', app, document);
 
-  await app.listen(3000);
+  await app.listen(PORT, () => console.log(`Running on PORT ${PORT}`));
 }
 
 bootstrap();
