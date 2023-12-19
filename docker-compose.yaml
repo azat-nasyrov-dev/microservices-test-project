@@ -1,0 +1,15 @@
+services:
+  auth_microservice:
+    build: ./auth-microservice
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./auth-microservice/src:/usr/src/app/src
+    command: npm run start:dev
+    environment:
+      - PORT=3000
+  posts_microservice:
+    build: ./posts-microservice
+    volumes:
+      - ./posts-microservice/src:/usr/src/app/src
+    command: npm run start:dev
