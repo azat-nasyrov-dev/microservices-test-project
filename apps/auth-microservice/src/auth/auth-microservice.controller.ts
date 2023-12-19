@@ -18,7 +18,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { RMQRoute } from 'nestjs-rmq';
+import { RMQRoute, RMQValidate } from 'nestjs-rmq';
 
 const REFRESH_TOKEN = 'refreshtoken';
 
@@ -35,6 +35,7 @@ export class AuthMicroserviceController {
     status: 201,
     description: 'The user has been successfully registered',
   })
+  @RMQValidate()
   @RMQRoute('register')
   public async register(@Body() dto: AuthRegisterDto) {
     const user = await this.authMicroserviceService.register(dto);
@@ -51,6 +52,7 @@ export class AuthMicroserviceController {
     status: 201,
     description: 'The user has been successfully login',
   })
+  @RMQValidate()
   @RMQRoute('login')
   public async login(@Body() dto: AuthLoginDto, @Res() res: Response) {
     const tokens = await this.authMicroserviceService.login(dto);
@@ -67,6 +69,7 @@ export class AuthMicroserviceController {
     status: 200,
     description: 'The user tokens has been successfully refreshed',
   })
+  @RMQValidate()
   @RMQRoute('refresh-tokens')
   public async refreshTokens(
     @Cookie(REFRESH_TOKEN) refreshToken: string,
