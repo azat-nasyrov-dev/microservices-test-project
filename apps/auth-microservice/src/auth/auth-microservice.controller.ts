@@ -2,9 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
-  Get,
   HttpStatus,
-  Post,
   Res,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -14,7 +12,13 @@ import { AuthMicroserviceService } from './auth-microservice.service';
 import { Tokens } from './types/auth.interface';
 import { Response } from 'express';
 import { Cookie } from '@app/common/decorators/cookies.decorator';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { RMQRoute } from 'nestjs-rmq';
 
 const REFRESH_TOKEN = 'refreshtoken';
 
@@ -27,8 +31,11 @@ export class AuthMicroserviceController {
   ) {}
 
   @ApiOperation({ summary: 'Register user' })
-  @ApiResponse({ status: 201, description: 'The user has been successfully registered' })
-  @Post('register')
+  @ApiResponse({
+    status: 201,
+    description: 'The user has been successfully registered',
+  })
+  @RMQRoute('register')
   public async register(@Body() dto: AuthRegisterDto) {
     const user = await this.authMicroserviceService.register(dto);
 
@@ -40,8 +47,11 @@ export class AuthMicroserviceController {
   }
 
   @ApiOperation({ summary: 'Login user' })
-  @ApiResponse({ status: 201, description: 'The user has been successfully login' })
-  @Post('login')
+  @ApiResponse({
+    status: 201,
+    description: 'The user has been successfully login',
+  })
+  @RMQRoute('login')
   public async login(@Body() dto: AuthLoginDto, @Res() res: Response) {
     const tokens = await this.authMicroserviceService.login(dto);
 
@@ -53,8 +63,11 @@ export class AuthMicroserviceController {
   }
 
   @ApiOperation({ summary: 'Refresh user tokens' })
-  @ApiResponse({ status: 200, description: 'The user tokens has been successfully refreshed' })
-  @Get('refresh-tokens')
+  @ApiResponse({
+    status: 200,
+    description: 'The user tokens has been successfully refreshed',
+  })
+  @RMQRoute('refresh-tokens')
   public async refreshTokens(
     @Cookie(REFRESH_TOKEN) refreshToken: string,
     @Res() res: Response,
